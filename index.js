@@ -6,12 +6,37 @@ app.get("/", (req, res) => { // a função é chamada toda vez que a rota é cha
   res.send("bem vindo! :)"); // enviando uma resposta, toda rota precisa devolver uma resposta de alguma forma, a resposta pode ser uma página html, um json, xml, download, arquivo etc. Ele só consegue enviar apenas 1 resposta por rota e uma única vez.
 });
 
-app.get("/blog", (req, res) => {
-  res.send("Bem vindo ao meu blog :B")
+
+// req => dados enviados pelo usuário, res => resposta que será enviada para o usuário
+
+app.get("/blog/:artigo?", (req, res) => {// para criar um parâmetro não obrigatório, colocamos um ? no final, isso possibilita que mesmo sem declarar esse parâmetro eu consiga ir para a rota blog
+  let artigo = req.params.artigo;
+
+  if(artigo){ // se existir o parâmetro artigo então exibo a mensagem com o artigo
+    res.send(`Artigo ${artigo}`);
+  }else{ // Se não, uso a mensagem inicial
+    res.send("Bem vindo ao meu blog :B");
+  }
+
 })
 
+// query params - não muito utilizado, por ser muito aberto, caiu em desuso
 app.get("/canal/youtube", (req, res) => {
-  res.send("Bem vindo ao meu canal :D")
+  let canal = req.query["canal"]; // Dessa o usuário consegue passar o parâmetro colocando ex: canal/youtube?canal=vevo 
+
+  if(canal){
+    res.send(canal) // aqui respondemos com esse novo parâmetro
+  } else {
+    res.send("Nenhum canal fornecido")
+  }
+  
+})
+
+app.get("/ola/:nome/:sobrenome",(req, res) => { // o : cria um parâmetro na rota
+  let nome = req.params.nome; // aqui passo o nome do parâmetro depois req.params para acessar os dados enviados pela requisição nesse parâmetro
+  let sobrenome = req.params.sobrenome; 
+  res.send(`olá ${nome} ${sobrenome}!`); // concatenei em template strings, porém poderia ter passado o req.params dentro do send, sem a necessidade de atribuir ele a uma variável
+
 })
 
 // Abertura do servidor, normalmente nas últimas linhas 
